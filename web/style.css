@@ -1,0 +1,38 @@
+.blink_me {
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+.text-shadow-me {
+
+    text-shadow: 2px 2px 3px rgba(0, 128, 0, 0.333), 0 0 1em rgba(0, 128, 0, 0.259), 0 0 0.2em green;
+}
+
+@keyframes animate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+.bashrcdis {
+    background: rgb(19,22,28);
+    background: -moz-radial-gradient(circle, rgba(19,22,28,0.8732164740896359) 0%, rgba(2,6,11,1) 100%);
+    background: -webkit-radial-gradient(circle, rgba(19,22,28,0.8732164740896359) 0%, rgba(2,6,11,1) 100%);
+    background: radial-gradient(circle, rgba(19,22,28,0.8732164740896359) 0%, rgba(2,6,11,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#13161c",endColorstr="#02060b",GradientType=1);
+}
+
+.preview-s {
+    background-color: #0E1117;
+}
+

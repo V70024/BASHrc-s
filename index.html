@@ -6,163 +6,104 @@
 <head>
     <html lang="en">
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>bashrcs</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link href="web/bootstrap-5.1.3-dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Types of .bashrc files</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"/>
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css"/>
+    <link rel="stylesheet" href="web/bootstrap-5.1.3-dist/css/bootstrap.min.css"/>
+    
     <script type="text/javascript" src="web/bootstrap-5.1.3-dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="web/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
-
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-
-    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    <script async defer type="text/javascript" src="https://buttons.github.io/buttons.js"></script>
+    <script defer type="text/javascript" src="https://pyscript.net/latest/pyscript.js"></script>
     
+    <!-- <script async defer type="text/javascript" src="https://buttons.github.io/buttons.js"></script>
+    <script defer type="text/javascript" src="https://pyscript.net/latest/pyscript.js"></script> -->
     
+    <link rel="stylesheet" href="web/style.css"/>
+
+    <py-config>
+        packages = ["requests", "pyodide-http"]
+        terminal = false
+
+        [splashscreen]
+            enabled = true
+            autoclose = true
+
+        [[interpreters]]
+            src = "https://cdn.jsdelivr.net/pyodide/v0.21.2/full/pyodide.js"
+            name = "pyodide-0.21.2"
+            lang = "python"
+
+    </py-config>
+
     
-    
+    <!-- <py-terminal></py-terminal> -->
 
-    <style>
-        .blink_me {
-            animation: blinker 1s linear infinite;
-        }
+    <py-script>
+        import requests
+        import pyodide_http
+        import base64
+        pyodide_http.patch_all()
 
-        @keyframes blinker {
-            50% {
-                opacity: 0;
-            }
-        }
-
-        .text-shadow-me {
-
-            text-shadow: 2px 2px 3px rgba(0, 128, 0, 0.333), 0 0 1em rgba(0, 128, 0, 0.259), 0 0 0.2em green;
-        }
-
-
-        .loader {
-    position: relative;
-    width: 350px;
-    height: 350px;
-    border-radius: 50%;
-    background: linear-gradient(#f07e6e, #84cdfa, #5ad1cd);
-    animation: animate 1.2s linear infinite;
-}
-
-@keyframes animate {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.loader span {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: linear-gradient(#f07e6e, #84cdfa, #5ad1cd);
-}
-
-.loader span:nth-child(1) {
-    filter: blur(5px);
-}
-
-.loader span:nth-child(2) {
-    filter: blur(10px);
-}
-
-.loader span:nth-child(3) {
-    filter: blur(25px);
-}
-
-.loader span:nth-child(4) {
-    filter: blur(50px);
-}
-
-.loader:after {
-    content: '';
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-    background: #f1f1f1;
-    border: solid white 10px;
-    border-radius: 50%;
-}
-
-
-    </style>
-
-
-
-<py-config>
-    packages = ["requests", "pyodide-http", "matplotlib"]
-    # terminal = false
-</py-config>
-
-<!-- <py-terminal></py-terminal> -->
-
-<py-script>
-    import requests
-    import pyodide_http
-    import base64
-    pyodide_http.patch_all()
-
-    def get_json_url(url, params=None):
-        resp = requests.get(url=url, verify=False, params=params)
-        if resp.status_code == 200:
-            return resp.json()
-        else:
-            return None
-    
-    def get_file_details(dir_data):
-        data_dict = {}
-        data_dict["dir"] = dir_data.get("path")
-        dict_dir_data = get_json_url(dir_data.get("url")).get("tree")
+        def get_json_url(url, params=None):
+            resp = requests.get(url=url, verify=False, params=params)
+            if resp.status_code == 200:
+                return resp.json()
+            else:
+                return None
         
-        for data_files in dict_dir_data:
-            if ".bashrc" == data_files["path"]:
-                data_dict[".bashrc-url"] = f"https://github.com/V70024/BASHrc-s/blob/master/{dir_data.get('path')}/.bashrc"
-                data_dict[".bashrc-code-url"] = f"https://github.com/V70024/BASHrc-s/raw/master/{dir_data.get('path')}/.bashrc"
-            elif "README.md" == data_files["path"]:
-                readme_url = f"https://github.com/V70024/BASHrc-s/blob/master/{dir_data.get('path')}/README.md"
-                data_dict[".README-url"] = readme_url
-                readme_content = get_json_url(data_files["url"]).get("content")
-                if readme_content:
-                    data_dict[".bashrc-preview"] = base64.b64decode(readme_content.encode("ascii")).decode("ascii")
+        def get_file_details(dir_data):
+            data_dict = {}
+            data_dict["dir"] = dir_data.get("path")
+            dict_dir_data = get_json_url(dir_data.get("url")).get("tree")
+            
+            for data_files in dict_dir_data:
+                if ".bashrc" == data_files["path"]:
+                    data_dict[".bashrc-url"] = f"https://github.com/V70024/BASHrc-s/blob/master/{dir_data.get('path')}/.bashrc"
+                    data_dict[".bashrc-code-url"] = f"https://github.com/V70024/BASHrc-s/raw/master/{dir_data.get('path')}/.bashrc"
+                elif "README.md" == data_files["path"]:
+                    readme_url = f"https://github.com/V70024/BASHrc-s/blob/master/{dir_data.get('path')}/README.md"
+                    data_dict[".README-url"] = readme_url
+                    readme_content = get_json_url(data_files["url"]).get("content")
+                    if readme_content:
+                        data_dict[".bashrc-preview"] = base64.b64decode(readme_content.encode("utf-8")).decode("utf-8")
+            
+            return data_dict
         
-        return data_dict
-    
-    def get_bashrc_data():
-        url = 'https://api.github.com/repos/V70024/BASHrc-s/git/trees/master?recursive=1'
-    
-        base_data = get_json_url(url)
-        if not base_data:
-            return None
-    
-        data = []
-        for dict_data in base_data.get("tree"):
-            if dict_data.get("type") == "tree":
-                if "bashrc-files" in dict_data.get("path") and "bashrc-files" != dict_data.get("path"):
-                    data_dict = get_file_details(dict_data)
-                    if data_dict  :
-                        data.append(data_dict)
-                           
-        return data
-    data = get_bashrc_data()
-</py-script>
+        def get_bashrc_data():
+            url = 'https://api.github.com/repos/V70024/BASHrc-s/git/trees/master?recursive=1'
+        
+            base_data = get_json_url(url)
+            if not base_data:
+                return None
+        
+            data = []
+            for dict_data in base_data.get("tree"):
+                print(dict_data)
+                if dict_data.get("type") == "tree":
+                    if "bashrc-files" in dict_data.get("path") and "bashrc-files" != dict_data.get("path"):
+                        data_dict = get_file_details(dict_data)
+                        if data_dict  :
+                            data.append(data_dict)
+                            
+                            
+            return data
+        
+    </py-script>
+
+    <py-script>
+        data = get_bashrc_data()
+    </py-script>
+
 </head>
 
-    <!-- <py-script>
-        print(data)
-
-    </py-script> -->
-
+<py-script>
+    print(get_bashrc_data())
+</py-script>
 
 
 <body style="background-color:#eeeeee; 	font-family: Lucida Console,Lucida Sans Typewriter,monaco,Bitstream Vera Sans Mono,monospace; 
@@ -171,15 +112,9 @@
 
 
 
-    <!-- <div class="loaders">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-    </div> -->
 
 
-    <div class="px-4 py-5 my-5 text-center">
+    <div class="px-4 py-0 my-5 text-center">
         <i class=" bi bi-terminal text-shadow-me" style="font-size: 100px ;"></i>
         <h1 class="display-5 fw-bold">Types of .bashrc files</h1>
         <div class="col-lg-6 mx-auto">
@@ -197,51 +132,42 @@
     </div>
 
     
-    <div id="all-bashrc">
+    <div id="all-bashrc"></div>
 
-
-    </div>
-
-
-    <!-- ###################################################### -->
     <py-script>
-        manual_div = Element("all-bashrc")
         bashrcs_list = []
         bashrcs = """
 
-        <div class="container col-xl-10 col-xxl-8 px-4 py-5 shadow-lg p-5 my-5 bg-white">
-            <a href="#{title}"></a>
-            <div class="row align-items-center g-lg-5 py-1">
-                
-                <div class="col-lg-5 text-center p-2 p-md-2 ">
+            <div class=" container col-xl-10 col-xxl-8 shadow-lg px-4 p-0 my-5 py-5  text-white bashrcdis">
+                <a href="#{title}"></a>
+                <div class="row align-items-center g-lg-5 py-1">
                     
-                    <h2 class="display-6 fw-bold lh-1 mb-3">
-                        <a href="#{title}"><i class="bi bi-hash"></i></a>{title}      
-                        <span class="fs-4  fw-bolder lh-1 mb-3">num:{index}</span>      
-                    </h2>
-                    
+                    <div class="col-lg-5 text-center p-2 p-md-2 ">
+                        
+                        <h2 class="display-6 fw-bold lh-1 mb-3">
+                            <a href="#{title}"><i class="bi bi-hash"></i></a>{title}      
+                            <span class="fs-4  fw-bolder lh-1 mb-3">num:{index}</span>      
+                        </h2>
 
-                    <a href="{bashrc_url}" target="_blank" class="btn btn-secondary fs-5 active">
-                        <i type="button" class=""><i class="bi bi-filetype-sh"> File</i></i>
-                    </a>
-                    <a href="{bashrc_code_url}" target="_blank" class="btn btn-success fs-5 active">
-                        <i type="button" class=""><i class="bi bi-braces"> Code</i></i>
-                    </a>
-                </div>
-
-                <div class="col-md-10 mx-auto col-lg-7">
-                    <div
-                        class="fs-sm-1 fs-5 p-3 p-md-3 border rounded-3 border-start border-success bg-dark shadow-lg text-success">
-                        <i class="bi bi-terminal text-shadow-me"> Preview </i>
-                        <div class="p-1 p-md-2 border rounded-3 border-start border-success">
-                            {bashrc_preview}
-                            <i class="blink_me">█</i>
-                        </div>
+                        <a href="{bashrc_url}" target="_blank" class="btn btn-secondary fs-5 active">
+                            <i type="button" class=""><i class="bi bi-filetype-sh"> File</i></i>
+                        </a>
+                        <a href="{bashrc_code_url}" target="_blank" class="btn btn-success fs-5 active">
+                            <i type="button" class=""><i class="bi bi-braces"> Code</i></i>
+                        </a>
                     </div>
 
+                    <div class="col-md-10 mx-auto col-lg-7">
+                        <div class="fs-sm-1 fs-5 p-3 p-md-3 border rounded-3 border-success shadow-lg text-success" >
+                            <i class="bi bi-terminal text-shadow-me"> Preview </i>
+                            <div class="preview-s p-1 p-md-2 border rounded-3 border-start border-success">
+                                {bashrc_preview}<i class="blink_me">█</i>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
-        </div>
         """
 
 
@@ -258,7 +184,7 @@
                 )
             )
 
-
+        manual_div = Element("all-bashrc")
         manual_div.element.innerHTML = "<br>".join(bashrcs_list)
 
     </py-script>
@@ -267,6 +193,11 @@
 <footer class=" bottom-0  w-100 text-center">
     <hr>
     <p class=" fs-6 mb-3"><b><i class="bi bi-chevron-left"></i>py<i class="bi bi-chevron-right"></i></b> I used a <a href="https://pyscript.net"  target="_blank">pyscript</a> to make this page </p>
+
+    <pre>
+        <font color="#CC0000">┌─[</font>app<font color="#FCE94F"><b>@</b></font><font color="#34E2E2"><b>70024</b></font><font color="#CC0000">]─[</font><font color="#4E9A06">/usr/bin</font><font color="#CC0000">]</font>
+        <font color="#CC0000">└──╼ </font><font color="#FCE94F"><b>$</b></font>
+    </pre>
 </footer>
 
 </body>
