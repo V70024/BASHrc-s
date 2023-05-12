@@ -1,1 +1,1 @@
-<font color="#34E2E2"><b>03:28:34 </b></font><font color="#CC0000">app</font>:/usr/bin <font color="#CC0000">$? $</font>
+<pre><font color="#34E2E2"><b>03:28:34 </b></font><font color="#CC0000">user</font>:/usr/bin <font color="#CC0000">$? $</font></pre>
