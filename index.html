@@ -6,7 +6,7 @@
 <head>
     <html lang="en">
     <meta charset="UTF-8">
-    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Types of .bashrc files</title>
@@ -19,14 +19,11 @@
     <script type="text/javascript" src="web/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
     <script async defer type="text/javascript" src="https://buttons.github.io/buttons.js"></script>
     <script defer type="text/javascript" src="https://pyscript.net/latest/pyscript.js"></script>
-    
-    <!-- <script async defer type="text/javascript" src="https://buttons.github.io/buttons.js"></script>
-    <script defer type="text/javascript" src="https://pyscript.net/latest/pyscript.js"></script> -->
-    
+
     <link rel="stylesheet" href="web/style.css"/>
 
     <py-config>
-        packages = ["requests", "pyodide-http"]
+        packages = ["beautifulsoup4", "requests", "pyodide-http"]
         terminal = false
 
         [splashscreen]
@@ -83,7 +80,6 @@
         
             data = []
             for dict_data in base_data.get("tree"):
-                print(dict_data)
                 if dict_data.get("type") == "tree":
                     if "bashrc-files" in dict_data.get("path") and "bashrc-files" != dict_data.get("path"):
                         data_dict = get_file_details(dict_data)
@@ -101,17 +97,9 @@
 
 </head>
 
-<py-script>
-    print(get_bashrc_data())
-</py-script>
 
 
-<body style="background-color:#eeeeee; 	font-family: Lucida Console,Lucida Sans Typewriter,monaco,Bitstream Vera Sans Mono,monospace; 
-">
-
-
-
-
+<body class="bg-black">
 
 
     <div class="px-4 py-0 my-5 text-center">
@@ -120,9 +108,9 @@
         <div class="col-lg-6 mx-auto">
             <p class="lead mb-4">Here you can view and use all types of ".bashrc" files.</p>
             <div class="d-grid gap-2 d-sm-flex justify-content-sm-center p-3">
-                <a href="https://github.com/V70024/BASHrc-s" target="_blank" class="btn btn-dark fs-5 active"><i class="bi bi-github">
+                <a href="https://github.com/V70024/BASHrc-s" target="_blank" class="btn btn-outline-light fs-5"><i class="bi bi-github">
                             GitHub</i></a>
-                <a href="https://github.com/V70024/BASHrc-s/blob/master/README.md" target="_blank" class="btn btn-secondary fs-5 active"><i
+                <a href="https://github.com/V70024/BASHrc-s/blob/master/README.md" target="_blank" class="btn btn-outline-secondary fs-5"><i
                             class="bi bi-filetype-md"> README</i></a>
             </div>
             <a style="display:block;" target="_blank" class="github-button btn btn-dark fs-5 active"
@@ -135,33 +123,36 @@
     <div id="all-bashrc"></div>
 
     <py-script>
+        from bs4 import BeautifulSoup
+
+
         bashrcs_list = []
         bashrcs = """
 
-            <div class=" container col-xl-10 col-xxl-8 shadow-lg px-4 p-0 my-1 py-2  text-white bashrcdis">
+            <div class=" container col-sm-12 col-md-12 col-lg-11 col-xl-9 col-xxl-6 shadow-lg px-4 p-0 my-1 py-2  text-white bashrcdis">
                 <a href="#{title}"></a>
                 <div class="row align-items-center g-lg-5 py-1">
                     
+                    <!-- <span class="fs-5  fw-bolder lh-1 mb-3 border rounded-3 border-start border-white p-1 ">num:{index}</span>       -->
                     <div class="col-lg-5 text-center p-2 p-md-2 ">
                         
-                        <h2 class="display-6 fw-bold lh-1 mb-3">
+                        <h2 class=" fw-bold lh-1 mb-3">
                             <a href="#{title}"><i class="bi bi-hash"></i></a>{title}      
-                            <span class="fs-4  fw-bolder lh-1 mb-3">num:{index}</span>      
                         </h2>
 
-                        <a href="{bashrc_url}" target="_blank" class="btn btn-secondary fs-5 active">
-                            <i type="button" class=""><i class="bi bi-filetype-sh"> File</i></i>
+                        <a href="{bashrc_url}" target="_blank" class="btn btn-outline-secondary fs-6 shadow-lg">
+                            <i class="bi bi-filetype-sh"> File</i>
                         </a>
-                        <a href="{bashrc_code_url}" target="_blank" class="btn btn-success fs-5 active">
-                            <i type="button" class=""><i class="bi bi-braces"> Code</i></i>
+                        <a href="{bashrc_code_url}" target="_blank" class="btn btn-outline-success fs-6 shadow-lg">
+                            <i class="bi bi-braces"> Code</i>
                         </a>
                     </div>
 
                     <div class="col-md-10 mx-auto col-lg-7">
-                        <div class="fs-sm-1 fs-5 p-3 p-md-3 border rounded-3 border-success shadow-lg text-success" >
-                            <i class="bi bi-terminal text-shadow-me"> Preview </i>
+                        <div class="fs-sm-1 fs-5 p-3 p-md-3  shadow-lg text-success " >
+                            <i class="bi bi-terminal text-shadow-me"> <b>[Terminal]</b> Preview {index}</i>
                             <div class="preview-s p-1 p-md-2 border rounded-3 border-start border-success">
-                                {bashrc_preview}<i class="blink_me">█</i>
+                                 {bashrc_preview}<!-- <i class="blink_me">█</i> -->
                             </div>
                         </div>
 
@@ -170,9 +161,14 @@
             </div>
         """
 
-
-
         for index, dict_ in enumerate(data) :
+
+            soup = BeautifulSoup(dict_[".bashrc-preview"], 'html.parser')
+            last_font_tag = soup.pre.find_all('font')[-1]
+            font_tag = soup.new_tag('font', attrs={'class':'typewriter'})
+            font_tag.string = 'ls'
+            last_font_tag.insert_after(font_tag)
+            dict_[".bashrc-preview"] = soup.prettify()
 
             bashrcs_list.append(
                 bashrcs.format(
@@ -183,11 +179,12 @@
                     bashrc_preview=dict_[".bashrc-preview"],
                 )
             )
-
         manual_div = Element("all-bashrc")
         manual_div.element.innerHTML = "<br>".join(bashrcs_list)
 
     </py-script>
+
+
 </div>
 
 <footer class=" bottom-0  w-100 text-center">

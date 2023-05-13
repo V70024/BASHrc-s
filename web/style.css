@@ -1,5 +1,16 @@
-.blink_me {
+body {
+    /* background-color:#eeeeee;  */
+    font-family: Lucida Console, Lucida Sans Typewriter, monaco, Bitstream Vera Sans Mono, monospace;
+    color: rgba(0, 123, 0, 0.746);
+    font-style: normal;
+
+
+}
+
+.blink_char {
     animation: blinker 1s linear infinite;
+    /* display: inherit; */
+
 }
 
 @keyframes blinker {
@@ -23,16 +34,69 @@
     }
 }
 
+.preview-s pre {
+    line-height: 1.1em;
+    font-style: normal;
+    margin-top: 0;
+    margin-bottom: 0;
+    display: inherit;
+    cursor: text;
+    caret-shape: block;
+    blink-caret .5s step-end infinite;
+}
+
+@keyframes blink-caret {
+
+    from,
+    to {
+        border-color: transparent
+    }
+
+    50% {
+        border-color: orange
+    }
+}
+
+.typewriter {
+    overflow: hidden;
+    border-right: 0.60em solid rgb(0, 155, 3);
+    white-space: nowrap;
+    margin: 0 auto;
+    animation:
+        typing 3.5s steps(30, end),
+        blink-caret .9s step-end infinite;
+}
+
+@keyframes typing {
+    from {
+        width: 0
+    }
+
+    to {
+        width: 100%
+    }
+}
+
+@keyframes blink-caret {
+
+    from,
+    to {
+        border-color: transparent
+    }
+
+    50% {
+        border-color: rgb(21, 128, 0)
+    }
+}
 
 .bashrcdis {
-    background: rgb(19,22,28);
-    background: -moz-radial-gradient(circle, rgba(19,22,28,0.8732164740896359) 0%, rgba(2,6,11,1) 100%);
-    background: -webkit-radial-gradient(circle, rgba(19,22,28,0.8732164740896359) 0%, rgba(2,6,11,1) 100%);
-    background: radial-gradient(circle, rgba(19,22,28,0.8732164740896359) 0%, rgba(2,6,11,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#13161c",endColorstr="#02060b",GradientType=1);
+    background: rgb(44, 192, 0);
+    background: -moz-radial-gradient(circle, rgba(44, 192, 0, 0.06089154411764708) 0%, rgba(0, 0, 0, 0.24856661414565828) 100%);
+    background: -webkit-radial-gradient(circle, rgba(44, 192, 0, 0.06089154411764708) 0%, rgba(0, 0, 0, 0.24856661414565828) 100%);
+    background: radial-gradient(circle, rgba(44, 192, 0, 0.06089154411764708) 0%, rgba(0, 0, 0, 0.24856661414565828) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#2cc000", endColorstr="#000000", GradientType=1);
 }
 
 .preview-s {
     background-color: #0E1117;
 }
-
